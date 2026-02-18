@@ -1,4 +1,4 @@
-# AgentSched — Distributed Agent Operating System
+# go-scheduler — Distributed Agent Operating System
 
 <p align="center">
   <strong>Orchestrate dozens-to-hundreds of LLM agents working in parallel toward collective goals.</strong>
@@ -9,7 +9,7 @@
   <a href="https://go.dev"><img src="https://img.shields.io/badge/Go-1.22+-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go 1.22+"></a>
 </p>
 
-**AgentSched** is a Go scheduler that orchestrates open-source agentic LLMs on GPU clusters (4 GPUs/node, vLLM, batch=10, 10-80K tokens). It handles tool calling, shared memory, inter-agent communication, DAG orchestration, and progress visibility. Think: distributed Agent OS.
+**go-scheduler** is a Go scheduler that orchestrates open-source agentic LLMs on GPU clusters (4 GPUs/node, vLLM, batch=10, 10-80K tokens). It handles tool calling, shared memory, inter-agent communication, DAG orchestration, and progress visibility. Think: distributed Agent OS.
 
 ## Architecture
 
@@ -44,7 +44,7 @@
 - **Pre-built Patterns** — parallel, chain, debate, map-reduce graphs
 - **GPU-Aware Scheduling** — priority queue, token budget / model affinity / GPU-aware placement
 - **Durable Execution** — workflow engine with checkpointing for agent state recovery
-- **Observability** — Prometheus metrics (`agents_active`, `llm_latency_seconds`, `tokens_total`) + OpenTelemetry tracing
+- **Observability** — Prometheus metrics (`go_scheduler_agents_active`, `go_scheduler_llm_latency_seconds`, `go_scheduler_tokens_total`) + OpenTelemetry tracing
 - **Cluster Mode** — Hollywood cluster with pluggable discovery providers
 
 ## Quick Start
@@ -55,16 +55,16 @@ Runtime: **Go 1.22+**
 git clone https://github.com/lingzhi227/go-scheduler.git
 cd go-scheduler
 
-go build ./cmd/agentsched
+go build ./cmd/go-scheduler
 
 # Run with default config (expects a vLLM server on localhost:8000)
-./agentsched
+./go-scheduler
 
 # Run with config file
-./agentsched -config config.json
+./go-scheduler -config config.json
 
 # Run with environment overrides
-AGENTSCHED_VLLM_URLS=http://gpu1:8000,http://gpu2:8000 AGENTSCHED_ADDR=:9090 ./agentsched
+GO_SCHEDULER_VLLM_URLS=http://gpu1:8000,http://gpu2:8000 GO_SCHEDULER_ADDR=:9090 ./go-scheduler
 ```
 
 ## Configuration
@@ -91,10 +91,10 @@ JSON config file or environment variables:
 
 | Env var | Description |
 |---------|-------------|
-| `AGENTSCHED_ADDR` | REST API listen address (default `:8080`) |
-| `AGENTSCHED_VLLM_URLS` | Comma-separated vLLM server URLs |
-| `AGENTSCHED_MEMORY_BACKEND` | `inmemory` or `redis` |
-| `AGENTSCHED_REDIS_ADDR` | Redis address for distributed memory |
+| `GO_SCHEDULER_ADDR` | REST API listen address (default `:8080`) |
+| `GO_SCHEDULER_VLLM_URLS` | Comma-separated vLLM server URLs |
+| `GO_SCHEDULER_MEMORY_BACKEND` | `inmemory` or `redis` |
+| `GO_SCHEDULER_REDIS_ADDR` | Redis address for distributed memory |
 
 ## REST API
 
@@ -126,9 +126,9 @@ curl http://localhost:8080/tasks/<task-id>
 
 ```
 go-scheduler/
-├── cmd/agentsched/main.go           # Entry point
+├── cmd/go-scheduler/main.go         # Entry point
 ├── api/rest/server.go               # REST API
-├── internal/config/config.go        # YAML/env config loading
+├── internal/config/config.go        # JSON/env config loading
 ├── pkg/
 │   ├── vllm/                        # vLLM client, pool, routing
 │   │   ├── types.go                 #   ChatCompletion request/response types

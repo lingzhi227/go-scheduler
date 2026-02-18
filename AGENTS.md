@@ -8,9 +8,9 @@
 - Source code lives under `cmd/`, `pkg/`, `internal/`, `api/`.
 - Tests: colocated `*_test.go` files. Use `_test` package suffix to avoid import cycles when testing against subpackages.
 - Reference projects: `github/` directory contains cloned repos for API reference only. They are fenced off by their own `go.mod` and are **not** part of the build. Never edit files under `github/`.
-- Config: `internal/config/` loads JSON config with env var overrides (`AGENTSCHED_*` prefix).
+- Config: `internal/config/` loads JSON config with env var overrides (`GO_SCHEDULER_*` prefix).
 - REST API: `api/rest/` uses Go 1.22+ `http.ServeMux` routing (`METHOD /path`).
-- Entry point: `cmd/agentsched/main.go`.
+- Entry point: `cmd/go-scheduler/main.go`.
 
 ## Package Map
 
@@ -43,7 +43,7 @@ go vet ./...
 go test -race ./...
 
 # Build binary
-go build -o agentsched ./cmd/agentsched
+go build -o go-scheduler ./cmd/go-scheduler
 
 # Tidy dependencies
 go mod tidy
@@ -70,7 +70,7 @@ go mod tidy
 - **Memory scopes**: four tiers — `working` (session), `procedural` (patterns), `planning` (goals), `global` (shared). Scopes are string constants, not iota.
 - **Topology**: default sparse connectivity (30-50%) per EMNLP 2024 sparse communication paper. All topology types in `pkg/comm/topology.go`.
 - **Aggregation**: default majority vote per NeurIPS 2025. LLM-merge available for richer synthesis.
-- **Config**: JSON file + `AGENTSCHED_*` env vars. No YAML dependency (keep deps minimal).
+- **Config**: JSON file + `GO_SCHEDULER_*` env vars. No YAML dependency (keep deps minimal).
 
 ## Key Patterns
 
@@ -118,8 +118,8 @@ ChildFailed message received →
 
 - **Hollywood** (`github.com/anthdm/hollywood`): actor engine. Core types: `Engine`, `Receiver`, `Context`, `PID`, `Producer`. Lifecycle messages: `Initialized`, `Started`, `Stopped`.
 - **go-redis** (`github.com/redis/go-redis/v9`): used only in `pkg/memory/backends/redis.go`. Not required for dev (in-memory backend is default).
-- **Prometheus**: metrics registered via `promauto` in `pkg/observe/metrics.go`. Counters and gauges under `agentsched_*` namespace.
-- **OpenTelemetry**: tracing spans in `pkg/observe/trace.go`. Tracer name: `agentsched`.
+- **Prometheus**: metrics registered via `promauto` in `pkg/observe/metrics.go`. Counters and gauges under `go_scheduler_*` namespace.
+- **OpenTelemetry**: tracing spans in `pkg/observe/trace.go`. Tracer name: `go-scheduler`.
 
 ## Testing
 
@@ -148,7 +148,7 @@ ChildFailed message received →
 
 1. Implement `agent.Agent` interface
 2. Register factory in `pkg/actor/registry.go` via `RegisterFactory(kind, factory)`
-3. Add to config YAML/JSON under `agents[]`
+3. Add to config JSON under `agents[]`
 
 ### Adding a new topology
 
@@ -164,7 +164,7 @@ ChildFailed message received →
 ### Adding a new memory backend
 
 1. Implement `memory.Backend` interface in `pkg/memory/backends/`
-2. Wire in `cmd/agentsched/main.go` config switch
+2. Wire in `cmd/go-scheduler/main.go` config switch
 
 ### Adding a new graph pattern
 

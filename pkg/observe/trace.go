@@ -8,9 +8,9 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-const tracerName = "agentsched"
+const tracerName = "go-scheduler"
 
-// Tracer returns the OpenTelemetry tracer for AgentSched.
+// Tracer returns the OpenTelemetry tracer for go-scheduler.
 func Tracer() trace.Tracer {
 	return otel.Tracer(tracerName)
 }

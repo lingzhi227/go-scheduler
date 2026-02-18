@@ -150,7 +150,7 @@ func main() {
 		cancel()
 	}()
 
-	slog.Info("agentsched starting",
+	slog.Info("go-scheduler starting",
 		"addr", cfg.Server.Addr,
 		"vllm_servers", len(urls),
 		"agents", len(childSpecs),

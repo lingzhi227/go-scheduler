@@ -24,14 +24,14 @@ func NewRedis(addr, password string, db int) *Redis {
 			Password: password,
 			DB:       db,
 		}),
-		prefix: "agentsched:mem:",
+		prefix: "go-scheduler:mem:",
 	}
 }
 
 // NewRedisFromClient creates a Redis backend from an existing client.
 func NewRedisFromClient(client *redis.Client, prefix string) *Redis {
 	if prefix == "" {
-		prefix = "agentsched:mem:"
+		prefix = "go-scheduler:mem:"
 	}
 	return &Redis{client: client, prefix: prefix}
 }

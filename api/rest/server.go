@@ -17,7 +17,7 @@ import (
 	"github.com/lingzhi227/go-scheduler/pkg/orchestrate"
 )
 
-// Server is the REST API server for AgentSched.
+// Server is the REST API server for go-scheduler.
 type Server struct {
 	engine     *hollywoodactor.Engine
 	registry   *actorpkg.Registry

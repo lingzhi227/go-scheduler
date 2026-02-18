@@ -61,10 +61,10 @@ func Load(path string) (*Config, error) {
 	}
 
 	// Environment variable overrides
-	if addr := os.Getenv("AGENTSCHED_ADDR"); addr != "" {
+	if addr := os.Getenv("GO_SCHEDULER_ADDR"); addr != "" {
 		cfg.Server.Addr = addr
 	}
-	if urls := os.Getenv("AGENTSCHED_VLLM_URLS"); urls != "" {
+	if urls := os.Getenv("GO_SCHEDULER_VLLM_URLS"); urls != "" {
 		for _, u := range strings.Split(urls, ",") {
 			u = strings.TrimSpace(u)
 			if u != "" {
@@ -72,10 +72,10 @@ func Load(path string) (*Config, error) {
 			}
 		}
 	}
-	if backend := os.Getenv("AGENTSCHED_MEMORY_BACKEND"); backend != "" {
+	if backend := os.Getenv("GO_SCHEDULER_MEMORY_BACKEND"); backend != "" {
 		cfg.Memory.Backend = backend
 	}
-	if redisAddr := os.Getenv("AGENTSCHED_REDIS_ADDR"); redisAddr != "" {
+	if redisAddr := os.Getenv("GO_SCHEDULER_REDIS_ADDR"); redisAddr != "" {
 		cfg.Memory.Redis.Addr = redisAddr
 	}
 
